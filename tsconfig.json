@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "forceConsistentCasingInFileNames": true,
+      "strictPropertyInitialization": false,
+      "module": "commonjs",
+      "target": "es6",
+      "outDir": "./build",
+      "rootDir": "./",
+      "esModuleInterop": true,
+      "emitDecoratorMetadata": true,
+      "useUnknownInCatchVariables": false,
+      "experimentalDecorators": true,
+      "skipLibCheck": true,
+      "noImplicitAny": false,
+      "strict": true,
+      "sourceMap": true
+    }
+  }

@@ -1,0 +1,39 @@
+{
+  "name": "svc-restapi",
+  "version": "1.0.0",
+  "description": "workshop restapi service",
+  "main": "index.js",
+  "scripts": {
+    "serve": "nodemon index.ts",
+    "build": "webpack"
+  },
+  "author": "Daniele Baggio",
+  "license": "ISC",
+  "dependencies": {
+    "@decorators/di": "^1.0.3",
+    "@decorators/express": "^2.6.0",
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.7",
+    "pg": "^8.7.3",
+    "reflect-metadata": "^0.1.13",
+    "ts-loader": "^9.2.8",
+    "typeorm": "^0.2.45",
+    "webpack": "^5.70.0",
+    "webpack-node-externals": "^3.0.0",
+    "webpack-shell-plugin": "^0.5.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.21",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.2",
+    "webpack-cli": "^4.9.2"
+  }
+}

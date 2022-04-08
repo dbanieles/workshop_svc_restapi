@@ -1,0 +1,139 @@
+version: "3.9"
+
+services:
+
+  # svc-frontend:
+  #   image: svc-frontend:latest
+  #   volumes:
+  #     - /frontend/data:/var/lib/postgresql/data
+  #   environment:
+  #     - RESTAPI_ENDPOINT_URL="http://localhost:8080"
+  #     - TEAMS_SENDER_ENDPOINT_URL="http://localhost:8081"
+  #     - MAIL_SENDER_ENDPOINT_URL="http://localhost:8082"
+  #   networks:
+  #     - workshop
+
+  svc-restapi:
+    image: svc-restapi:latest
+    # container_name: svc-restapi
+    ports:
+      - 8080:8080
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 500M
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - /restapi/data:/var/lib/restapi/data
+    environment:
+      - DATABASE_HOST=postgresql
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=demo
+      - DATABASE_USE=postgres
+      - SERVER_PORT=8080
+    depends_on:
+      - postgresql
+    networks:
+      - workshop
+
+  # svc-teams-sender:
+  #   image: svc-teams-sender:latest
+  #   ports:
+  #     - 8081:80
+  #   volumes:
+  #     - svc-teams-sender:/home/data
+  #   environment:
+  #     - HOST_PORT=8081
+  #     - DATABASE_HOST=localhost
+  #     - DATABASE_USER=postgress
+  #     - DATABASE_PASSWORD=demo
+  #   depends_on:
+  #     - postgresql
+  #   networks:
+  #     - workshop
+
+  # svc-mail-sender:
+  #   image: svc-mail-sender:latest
+  #   ports:
+  #     - 8082:80
+  #   volumes:
+  #     - /mailsender/data:/var/lib/postgresql/data
+  #   environment:
+  #     - HOST_PORT=8082
+  #     - DATABASE_HOST=localhost
+  #     - DATABASE_USER=postgress
+  #     - DATABASE_PASSWORD=demo
+  #   networks:
+  #     - workshop
+
+  job-database-migrations:
+    image: job-database-migrations:latest
+    container_name: job-database-migrations
+    environment:
+      - DATABASE_PORT=5432
+      - DATABASE_HOST=postgresql
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=demo
+      - DATABASE_IN_USE=postgres
+      - DATABASE_SSL_CONNECTION=false
+      - MIGRATE_ENV=development
+      - BOOTSTRAP=""
+    volumes:
+      - /migrations/data:/var/lib/migrations/data
+    depends_on:
+      - postgresql
+    networks:
+      - workshop
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.5'
+    #       memory: 50M
+    #     reservations:
+    #       cpus: '0.0001'
+    #       memory: 20M
+    ports:
+      - 9090:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=daniele.baggio@bitsrl.net
+      - PGADMIN_DEFAULT_PASSWORD=root
+    volumes:
+      - /pgadmin/data:/var/lib/pgadmin/data
+    depends_on:
+      - postgresql
+    networks:
+      - workshop
+
+  postgresql:
+    image: postgres:latest
+    container_name: postgresql
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.5'
+    #       memory: 50M
+    volumes:
+      - /postgres/data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRES_PASSWORD=demo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    networks:
+      - workshop
+
+volumes:
+  svc-teams-sender:
+
+networks:
+  workshop:
+    driver: bridge

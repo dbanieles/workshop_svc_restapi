@@ -6,6 +6,7 @@ import { NotificationController } from './src/controllers/notification.controlle
 import * as BodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import { TemplateController } from './src/controllers/template.controller';
+import { ALLOWED_METHOD_VERBS, CORS_ORIGIN_URL } from './src/utils/costants';
 
 const express = require('express');
 const app = express();
@@ -17,8 +18,8 @@ const port: number = (process.env.SERVER_PORT || 8080) as number;
 app.use(BodyParser.urlencoded({ extended: false }))
 app.use(BodyParser.json());
 app.use(cors({
-  origin: '*',
-  methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
+  origin: CORS_ORIGIN_URL,
+  methods: [...ALLOWED_METHOD_VERBS],
 }));
 
 attachControllers(app, [

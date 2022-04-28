@@ -25,7 +25,7 @@ export class OAuthController {
     @Post('/login')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true
@@ -52,7 +52,7 @@ export class OAuthController {
     @Post('/register')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true,

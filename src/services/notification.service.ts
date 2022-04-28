@@ -1,5 +1,5 @@
 import { Injectable } from "@decorators/di";
-import { Repository } from "typeorm";
+import { DeleteResult, Repository, UpdateResult } from "typeorm";
 import { Trycatch } from "../decorators/catch.decorator";
 import { Inject } from "../decorators/inject.decorator";
 import { NotificationEntity } from "../entities/notification.entity";
@@ -36,7 +36,7 @@ export class NotificationService {
     async saveNotification(httpParams: HttpParams, notification: Notification): Promise<Notification> {
         const notificationsEntity: NotificationEntity = new Mapper<Notification,NotificationEntity>().toObject(notification);
         const repo: Repository<NotificationEntity> = await this._database.Repository(NotificationEntity as any);
-        const notificationSaved: any = await repo.save(notificationsEntity);
+        const notificationSaved: NotificationEntity = await repo.save(notificationsEntity);
         return notificationSaved;
     }
 
@@ -44,18 +44,18 @@ export class NotificationService {
     @Trycatch({
         context: "Service"
     })
-    async updateNotificationById(httpParams: HttpParams, notification: Notification): Promise<Notification> {
+    async updateNotificationById(httpParams: HttpParams, notification: Notification): Promise<UpdateResult> {
         const notificationsEntity: NotificationEntity = new Mapper<Notification,NotificationEntity>().toObject(notification);
         const repo: Repository<NotificationEntity> = await this._database.Repository(NotificationEntity as any);
-        const notificationUpdated: any = await repo.update(notification.id, notificationsEntity);
+        const notificationUpdated: UpdateResult = await repo.update(notification.id, notificationsEntity);
         return notificationUpdated;
     }
 
     @Trycatch({
         context: "Service"
     })
-    async deleteNotificationById(httpParams: HttpParams, notificationId: number): Promise<any>{
-        const notificationDeleted: any = await (await this._database.Repository(NotificationEntity as any)).delete(notificationId);
+    async deleteNotificationById(httpParams: HttpParams, notificationId: number): Promise<DeleteResult>{
+        const notificationDeleted: DeleteResult = await (await this._database.Repository(NotificationEntity as any)).delete(notificationId);
         return notificationDeleted;
     }
 

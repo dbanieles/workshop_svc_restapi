@@ -21,7 +21,7 @@ export class TemplateController {
     @Get('/templates')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true
@@ -41,7 +41,7 @@ export class TemplateController {
     @Get('/templates/:id')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true
@@ -62,7 +62,7 @@ export class TemplateController {
     @Post('/templates')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true,
@@ -84,7 +84,7 @@ export class TemplateController {
     @Put('/templates/:id')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true
@@ -105,7 +105,7 @@ export class TemplateController {
     @Delete('/templates/:id')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true

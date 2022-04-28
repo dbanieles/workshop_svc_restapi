@@ -1,10 +1,11 @@
 import { Response } from 'express';
 import { HttpResponse } from "../models/response.model";
 import { HttpStauts } from "../models/http.model";
+import { MyLogger } from '../utils/logger';
 
 export interface CathConfig {
     context?: string;
-    useResponse?: boolean;
+    withResponse?: boolean;
     message?: string;
 }
 
@@ -14,17 +15,17 @@ export const Trycatch = (config?: CathConfig) => (
     descriptor: PropertyDescriptor
 ) => {
     const fn = descriptor.value;
-    
+    const logger: MyLogger = new MyLogger();
     descriptor.value = async function (...args){
         const response: Response = (args[0]?.response ? args[0]?.response : args[1]) as Response;
         try {
             return await fn.apply(this, args);
         } catch (error) {
-            if(!config?.useResponse){
-                throw new Error(error?.message)
+            if(!config?.withResponse){
+                throw new Error(error?.message);
             };
             
-            console.error(error);
+            logger.error(error);
 
             response
                 .status(HttpStauts.INTERNAL_ERR)

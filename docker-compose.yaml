@@ -30,6 +30,11 @@ services:
     # container_name: svc-restapi
     ports:
       - 8080:8080
+      - 9292:9292
+    command:
+      - "node"
+      - "--inspect-brk=0.0.0.0:9292"
+      - "build/index.js" 
     deploy:
       replicas: 1
       resources:
@@ -69,12 +74,12 @@ services:
   #   networks:
   #     - workshop
 
-  # svc-mail-sender:
-  #   image: svc-mail-sender:latest
+  # svc-metrics-sender:
+  #   image: svc-metrics-sender:latest
   #   ports:
   #     - 8082:80
   #   volumes:
-  #     - /mailsender/data:/var/lib/postgresql/data
+  #     - svc-metrics-sender:/home/data
   #   environment:
   #     - HOST_PORT=8082
   #     - DATABASE_HOST=localhost

@@ -21,7 +21,7 @@ export class UserController {
     @Get('/users')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     async getUsers(request: Request, response: Response, next: NextFunction){
         const users: User[] = await this._userService.getUsers({request, response, next});
@@ -60,7 +60,7 @@ export class UserController {
     @Get('/users/filter/:term')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true
@@ -81,7 +81,7 @@ export class UserController {
     @Get('/users/:id')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true
@@ -102,7 +102,7 @@ export class UserController {
     @Post('/users')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true,
@@ -124,7 +124,7 @@ export class UserController {
     @Put('/users/:id')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true
@@ -146,7 +146,7 @@ export class UserController {
     @Delete('/users/:id')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true

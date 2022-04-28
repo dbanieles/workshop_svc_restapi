@@ -2,11 +2,12 @@ const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 
 const {
-  NODE_ENV = 'production',
+  NODE_ENV = 'development',
 } = process.env;
 
 module.exports = {
   entry: './index.ts',
+  devtool: 'eval-source-map',
   mode: NODE_ENV,
   target: 'node',
   output: {

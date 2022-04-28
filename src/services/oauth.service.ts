@@ -46,7 +46,6 @@ export class OAuthService {
     }
 
     async logout(){
-        console.log("Logout");
         return await "LOGOUT";
     }
 

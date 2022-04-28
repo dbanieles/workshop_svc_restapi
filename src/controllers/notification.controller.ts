@@ -9,6 +9,7 @@ import { API_BASE_URL, SERVICE_NAME } from "../utils/costants";
 import { Trycatch } from "../decorators/catch.decorator";
 import { Args } from "../decorators/args.decorator";
 import { NotificationEntity } from "../entities/notification.entity";
+import { DeleteResult, UpdateResult } from "typeorm";
 
 @Controller(API_BASE_URL)
 export class NotificationController {
@@ -21,7 +22,7 @@ export class NotificationController {
     @Get('/notifications')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true
@@ -41,7 +42,7 @@ export class NotificationController {
     @Get('/notifications/:id')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true
@@ -62,7 +63,7 @@ export class NotificationController {
     @Post('/notifications')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true,
@@ -84,14 +85,14 @@ export class NotificationController {
     @Put('/notifications/:id')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true
     })
     async updateNotification(request: Request, response: Response, next: NextFunction){
         const notification: Notification = request.body as Notification;
-        const notificationUpdated: NotificationEntity = await this._notificationService.updateNotificationById({request, response, next}, notification);
+        const notificationUpdated: UpdateResult = await this._notificationService.updateNotificationById({request, response, next}, notification);
         response.status(HttpStauts.SUCCESS).json(new HttpResponse({
             message: HttpStautsMessage.OK,
             status: HttpStauts.SUCCESS,
@@ -105,19 +106,20 @@ export class NotificationController {
     @Delete('/notifications/:id')
     @Trycatch({
         context: "Controller",
-        useResponse: true
+        withResponse: true
     })
     @Args({
         required: true
     })
     async deleteNotification(request: Request, response: Response, next: NextFunction){
         const notificationId: number = Number(request.params['id']);
-        const notification: Notification = await this._notificationService.deleteNotificationById({request, response, next}, notificationId);
+        const notificationDeleted: DeleteResult = await this._notificationService.deleteNotificationById({request, response, next}, notificationId);
         response.status(HttpStauts.SUCCESS).json(new HttpResponse({
             message: HttpStautsMessage.OK,
             status: HttpStauts.SUCCESS,
             context: "deleteNotification",
             service: SERVICE_NAME,
+            data: notificationDeleted,
             date: new Date()
         }));
     }

@@ -66,7 +66,7 @@ export class TemplateController {
     })
     @Args({
         required: true,
-        exludes: ["id"]
+        exclude: ["id"]
     })
     async saveTemplate(request: Request, response: Response, next: NextFunction){
         const template: Template = request.body as Template;

@@ -56,7 +56,7 @@ export class OAuthController {
     })
     @Args({
         required: true,
-        exludes:["id"]
+        exclude:["id"]
     })
     async register(request: Request, response: Response, next: NextFunction){ 
         const user: User = request.body as User;

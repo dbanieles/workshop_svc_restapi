@@ -106,7 +106,7 @@ export class UserController {
     })
     @Args({
         required: true,
-        exludes: ["id"]
+        exclude: ["id"]
     })
     async saveUser(request: Request, response: Response, next: NextFunction){
         const user: User = request.body as User;

@@ -6,7 +6,7 @@ import { HttpStauts } from "../models/http.model";
 
 export interface ParamConfig {
     includes?: string[];
-    exludes?: string[];
+    exclude?: string[];
     required?: boolean;
 }
 
@@ -26,7 +26,7 @@ export const Args = (config?: ParamConfig) => (
         };
 
         const isValid:boolean[] = Object.keys({...params})
-            .filter((key:string)=> !config?.exludes?.includes(key))
+            .filter((key:string)=> !config?.exclude?.includes(key))
             .map((key:string)=> !!params[key])
             .filter((param: boolean)=> !param);
 

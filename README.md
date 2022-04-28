@@ -13,3 +13,12 @@ docker compose command:
 8- docker-compose ps
 9- docker-compose scale <service-name>=<number>
 
+TODO LIST
+
+- svc-mail-sender
+- repo infr
+- terraform 
+- test
+
+
+

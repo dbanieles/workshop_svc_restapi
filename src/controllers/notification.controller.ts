@@ -66,7 +66,7 @@ export class NotificationController {
     })
     @Args({
         required: true,
-        exludes: ["id"]
+        exclude: ["id"]
     })
     async saveNotification(request: Request, response: Response, next: NextFunction){
         const notification: Notification = request.body as Notification;

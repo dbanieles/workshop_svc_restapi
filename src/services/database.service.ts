@@ -10,7 +10,7 @@ import { UserEntity } from "../entities/user.entity";
 export class DatabaseContextService<T>  {
 
     @Trycatch({
-        context: "Service",
+        context: "Database Connection",
     })
     async Context(): Promise<Connection>{
         const connectionManager = getConnectionManager();

@@ -15,7 +15,11 @@ export class MyLogger {
     config(): Logger{
         return winston.createLogger({
             transports: [
-                new winston.transports.Console()
+                new winston.transports.Console(),
+                new (winston.transports.File)({ 
+                    filename: '/var/lib/restapi/data/restapi.log',
+                    level: 'info' 
+                })
             ],
             format: winston.format.combine(
                 winston.format.label({

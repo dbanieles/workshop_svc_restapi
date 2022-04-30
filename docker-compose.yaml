@@ -3,37 +3,39 @@ version: "3.9"
 services:
 
   stress-test:
-    image: stress-test-container
+    image: stress-test-container:latest
     volumes:
     - ./templates:/etc/nginx/templates
     ports:
     - "8087:8080"
     environment:
-    - NGINX_HOST=foobar.com
+    - NGINX_HOST=localhost
     - NGINX_PORT=80
     networks:
       - workshop
 
-  # svc-frontend:
-  #   image: svc-frontend:latest
-  #   volumes:
-  #     - /frontend/data:/var/lib/postgresql/data
-  #   environment:
-  #     - RESTAPI_ENDPOINT_URL="http://localhost:8080"
-  #     - TEAMS_SENDER_ENDPOINT_URL="http://localhost:8081"
-  #     - MAIL_SENDER_ENDPOINT_URL="http://localhost:8082"
-  #   networks:
-  #     - workshop
+  svc-frontend:
+    image: svc-frontend:latest
+    volumes:
+      - ./data:/var/lib/frontend/data
+    environment:
+      - RESTAPI_ENDPOINT_URL="http://localhost:8080"
+      - TEAMS_SENDER_ENDPOINT_URL="http://localhost:8081"
+      - METRICS_SENDER_ENDPOINT_URL="http://localhost:8082"
+    depends_on:
+      - svc-restapi
+    networks:
+      - workshop
 
   svc-restapi:
     image: svc-restapi:latest
     # container_name: svc-restapi
     ports:
       - 8080:8080
-      - 9292:9292
+      - 9292:9292 #debug
     command:
       - "node"
-      - "--inspect-brk=0.0.0.0:9292"
+      # - "--inspect-brk=0.0.0.0:9292"
       - "build/index.js" 
     deploy:
       replicas: 1
@@ -44,7 +46,7 @@ services:
       restart_policy:
         condition: on-failure
     volumes:
-      - /restapi/data:/var/lib/restapi/data
+      - ./data:/var/lib/restapi/data
     environment:
       - DATABASE_HOST=postgresql
       - DATABASE_PORT=5432
@@ -54,7 +56,9 @@ services:
       - SERVER_PORT=8080
     depends_on:
       - postgresql
-      - stress-test
+      - pgadmin
+      - job-database-migrations
+      # - stress-test
     networks:
       - workshop
 
@@ -63,7 +67,7 @@ services:
   #   ports:
   #     - 8081:80
   #   volumes:
-  #     - svc-teams-sender:/home/data
+  #     - /tmp:/home/data
   #   environment:
   #     - HOST_PORT=8081
   #     - DATABASE_HOST=localhost
@@ -79,7 +83,7 @@ services:
   #   ports:
   #     - 8082:80
   #   volumes:
-  #     - svc-metrics-sender:/home/data
+  #     - /tmp:/home/data
   #   environment:
   #     - HOST_PORT=8082
   #     - DATABASE_HOST=localhost
@@ -101,7 +105,7 @@ services:
       - MIGRATE_ENV=development
       - BOOTSTRAP=""
     volumes:
-      - /migrations/data:/var/lib/migrations/data
+      - /tmp:/var/lib/migrations/data
     depends_on:
       - postgresql
     networks:
@@ -124,7 +128,7 @@ services:
       - PGADMIN_DEFAULT_EMAIL=daniele.baggio@bitsrl.net
       - PGADMIN_DEFAULT_PASSWORD=root
     volumes:
-      - /pgadmin/data:/var/lib/pgadmin/data
+      - /tmp:/var/lib/pgadmin/data
     depends_on:
       - postgresql
     networks:
@@ -139,7 +143,7 @@ services:
     #       cpus: '0.5'
     #       memory: 50M
     volumes:
-      - /postgres/data:/var/lib/postgresql/data
+      - database-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
     environment:
@@ -150,7 +154,7 @@ services:
       - workshop
 
 volumes:
-  svc-teams-sender:
+  database-data:
 
 networks:
   workshop:
